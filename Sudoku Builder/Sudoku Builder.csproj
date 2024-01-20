@@ -11,4 +11,9 @@
 	<ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Cell.cs~RF345fc623.TMP" />
+    <None Remove="Cell.cs~RF347d1ea6.TMP" />
+  </ItemGroup>
+
 </Project>
