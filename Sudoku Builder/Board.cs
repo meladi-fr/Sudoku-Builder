@@ -43,8 +43,16 @@ namespace Sudoku_Builder
                 _columns.Add(column);
             }
 
-            //populate sector objects, also by using cells by row and column in sets of 3
+            //populate sector objects, using cells by row and column index in sets of 3
             _sectors.Add(buildSector(0, 0));
+            _sectors.Add(buildSector(0, 3));
+            _sectors.Add(buildSector(0, 6));
+            _sectors.Add(buildSector(3, 0));
+            _sectors.Add(buildSector(3, 3));
+            _sectors.Add(buildSector(3, 6));
+            _sectors.Add(buildSector(6, 0));
+            _sectors.Add(buildSector(6, 3));
+            _sectors.Add(buildSector(6, 6));
         }
 
         private Sector buildSector(int row, int col)
@@ -54,8 +62,7 @@ namespace Sudoku_Builder
             {
                 for (int c = col; c < col+3; c++)
                 {
-                    
-                }
+                    cells.Add(_rows[r].GetCell(c));               }
             }
 
             var sector = new Sector(cells);
