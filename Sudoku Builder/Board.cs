@@ -13,33 +13,24 @@ namespace Sudoku_Builder
         private List<Column> _columns;
         private List<Sector> _sectors;
 
-        public Board() 
-        {            
+        private Cell[,]? _board;
+
+        public Board()
+        {
+            _board = new Cell[9, 9];
             _rows = new List<Row>();
             _columns = new List<Column>();
             _sectors = new List<Sector>();
 
-            fillBoard();
+            fillBoard(_board);
         }
 
-        private void fillBoard()
+        private void fillBoard(Cell[,] board)
         {
             for (int r = 0; r < 9; r++)
             {
-                //add new Row object to rows collection every iteration
-                var newRow = new Row();
-                _rows.Add(newRow);
-
                 for (int c = 0; c < 9; c++)
                 {
-                    //add new Column and Sector to their respective collections each iteration, but only while the first
-                    //row is populated in order to reach 9 indexes
-                    if (r == 0)
-                    {
-                        _columns.Add(new Column());
-                        _sectors.Add(new Sector());
-                    }
-
                     var valid = false;
                     var cell = new Cell();
                     int sect = getSector(r, c);
@@ -47,7 +38,7 @@ namespace Sudoku_Builder
                     while (!valid)
                     {
                         int tempVal = genCell();
-                        if (isCellValid(r, c, sect, tempVal))
+                        if (isCellValid(board, r, c, sect, tempVal))
                         {
                             cell.Value = tempVal;
                             cell.Row = r;
@@ -93,24 +84,30 @@ namespace Sudoku_Builder
             return number;
         }
 
-        private Boolean isCellValid(int row, int col, int sect, int value)
+        private Boolean isCellValid(Cell[,] board, int row, int col, int sect, int value)
         {
-            //check if a cell of this value already exists in the same row
-            foreach (Cell cell in _rows[row])
+            for (int i = 0; i < 9; i++)
             {
-                if (cell.Value == value) return false;
-            }
+                //check if a cell of this value already exists in the same row
+                if (board[i, col] != null && board[i, col].Value == value)  return false;
+                //foreach (Cell cell in _rows[row])
+                //{
+                //    if (cell.Value == value) return false;
+                //}
 
-            //check if a cell of this value already exists in the same column
-            foreach (Cell cell in _columns[col])
-            {
-                if (cell.Value == value) return false;
-            }
+                //check if a cell of this value already exists in the same column
+                if (board[row, i] != null && board[i, row].Value == value)  return false;
+                //foreach (Cell cell in _columns[col])
+                //{
+                //    if (cell.Value == value) return false;
+                //}
 
-            //check if a cell of this value already exists in the same sector
-            foreach (Cell cell in _sectors[sect])
-            {
-                if (cell.Value == value) return false;
+                //check if a cell of this value already exists in the same sector
+                if (board)
+                //foreach (Cell cell in _sectors[sect])
+                //{
+                //    if (cell.Value == value) return false;
+                //}
             }
 
             //none of the loops above found a duplicate number, so cell is valid
