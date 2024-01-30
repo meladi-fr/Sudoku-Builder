@@ -22,20 +22,20 @@ namespace Sudoku_Builder
             _columns = new List<Column>();
             _sectors = new List<Sector>();
 
-            fillBoard(_board);
+            _board = fillBoard(_board);
         }
 
-        private void fillBoard(Cell[,] board)
+        private Cell[,] fillBoard(Cell[,] board)
         {
             for (int r = 0; r < 9; r++)
             {
                 for (int c = 0; c < 9; c++)
                 {
-                    var valid = false;
+                    //var valid = false;
                     var cell = new Cell();
                     int sect = getSector(r, c);
 
-                    while (!valid)
+                    for (int v = 0; v < 9; v++)
                     {
                         int tempVal = genCell();
                         if (isCellValid(board, r, c, sect, tempVal))
@@ -44,18 +44,14 @@ namespace Sudoku_Builder
                             cell.Row = r;
                             cell.Column = c;
                             cell.Sector = sect;
-                            valid = true;
 
                             //update corresponding cell collections with valid cell details
                             _rows[r][c] = cell;
                             _columns[c][r] = cell;
                             _sectors[sect][r] = cell;
                         }
-                        else
-                        {
-                            valid = false;
-                        }
                     }
+                
                 }
             }
         }
