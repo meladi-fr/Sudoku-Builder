@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Data.Common;
 
 namespace Sudoku_Builder
 {
@@ -6,43 +7,25 @@ namespace Sudoku_Builder
     {
         private List<Cell> _row;
 
-        //creates a row object populated with unique numbers 1-9
         public Row()
         {
+            //creates a row object populated with nine zero-value cells
             _row = new List<Cell>();
             for (int i = 0; i < 9; i++)
             {
-                var cell = new Cell();
-                var valid = false;
-                while (!valid)
-                {
-                    int tempValue = GenValue();
-                    foreach (Cell c in _row)
-                    {
-                        if (c.Value == tempValue)
-                        {
-                            valid = false;
-                        }
-                        else
-                        {
-                            valid = true;
-                        }
-                    }                
-                }
+                _row.Add(new Cell());
             }
+        }
+
+        public Row(List<Cell> row)
+        {
+            _row = row;
         }
 
         public Cell GetCell(int index)
         {
             var cell = _row[index];
             return cell;
-        }
-
-        private int GenValue()
-        {
-            Random random = new Random();
-            var value = random.Next(1, 10);
-            return value;
         }
 
         public Cell this[int index] { get => ((IList<Cell>)_row)[index]; set => ((IList<Cell>)_row)[index] = value; }

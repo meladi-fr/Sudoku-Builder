@@ -41,5 +41,7 @@ namespace Sudoku_Builder
             sGrid.ColumnHeadersVisible = false;
             sGrid.ScrollBars = ScrollBars.None;
         }
+
+        private
     }
 }

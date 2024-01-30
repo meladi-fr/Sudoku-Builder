@@ -6,6 +6,16 @@ namespace Sudoku_Builder
     {
         private List<Cell> _column;
 
+        public Column()
+        {
+            //creates a column object populated with nine zero-value cells
+            _column = new List<Cell>();
+            for (int i = 0; i < 9; i++)
+            {
+                _column.Add(new Cell());
+            }
+        }
+
         public Column(List<Cell> column)
         {
             _column = column;

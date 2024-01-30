@@ -6,6 +6,16 @@ namespace Sudoku_Builder
     {
         private List<Cell> _sector;
 
+        public Sector()
+        {
+            //creates a sector object populated with nine zero-value cells
+            _sector = new List<Cell>();
+            for (int i = 0; i < 9; i++)
+            {
+                _sector.Add(new Cell());
+            }
+        }
+
         public Sector(List<Cell> sector)
         {
             _sector = sector;
