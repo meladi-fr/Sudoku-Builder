@@ -40,29 +40,25 @@ namespace Sudoku_Builder
                         _sectors.Add(new Sector());
                     }
 
-                    var valid = false;
-                    var cell = new Cell();
-                    int sect = getSector(r, c);
-
-                    while (!valid)
+                    while (_rows[r][c].Value == 0)
                     {
-                        int tempVal = genCell();
-                        if (isCellValid(r, c, sect, tempVal))
+                        var cell = new Cell();
+                        int sect = getSector(r, c);
+                        for (int v = 0; v < 9; v++)
                         {
-                            cell.Value = tempVal;
-                            cell.Row = r;
-                            cell.Column = c;
-                            cell.Sector = sect;
-                            valid = true;
+                            if (isCellValid(r, c, sect, v))
+                            {
+                                cell.Value = v;
+                                cell.Row = r;
+                                cell.Column = c;
+                                cell.Sector = sect;
 
-                            //update corresponding cell collections with valid cell details
-                            _rows[r][c] = cell;
-                            _columns[c][r] = cell;
-                            _sectors[sect][r] = cell;
-                        }
-                        else
-                        {
-                            valid = false;
+                                //update corresponding cell collections with valid cell details
+                                _rows[r][c] = cell;
+                                _columns[c][r] = cell;
+                                _sectors[sect][r] = cell;
+                                break;
+                            }
                         }
                     }
                 }
