@@ -16,14 +16,20 @@ namespace Sudoku_Builder
             //Figuring out logic in console first
             var board = new Board();
             var boardList = "";
-            foreach (Row row in board)
+            int row = 0;
+
+            foreach (Cell cell in board)
             {
-                foreach (Cell cell in row)
+                boardList += cell.Value.ToString();
+                row++;
+
+                if (row > 8)
                 {
-                    boardList += cell.Value.ToString();
+                    boardList += "\r\n";
+                    row = 0;
                 }
-                boardList += "\r\n";
             }
+
             Debug.WriteLine(boardList);
         }
 
@@ -42,6 +48,6 @@ namespace Sudoku_Builder
             sGrid.ScrollBars = ScrollBars.None;
         }
 
-        private
+        
     }
 }

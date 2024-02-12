@@ -7,25 +7,18 @@ using System.Threading.Tasks;
 
 namespace Sudoku_Builder
 {
-    public class Board : IEnumerable<Row>, IEnumerable<Column>, IEnumerable<Sector>
+    public class Board : IEnumerable 
     {
-        private List<Row> _rows;
-        private List<Column> _columns;
-        private List<Sector> _sectors;
-
         private Cell[,]? _board;
 
         public Board()
         {
             _board = new Cell[9, 9];
-            _rows = new List<Row>();
-            _columns = new List<Column>();
-            _sectors = new List<Sector>();
 
-            _board = fillBoard(_board);
+            FillBoard(_board);
         }
 
-        private Cell[,] fillBoard(Cell[,] board)
+        private bool FillBoard(Cell[,] board)
         {
             for (int r = 0; r < 9; r++)
             {
@@ -33,30 +26,37 @@ namespace Sudoku_Builder
                 {
                     //var valid = false;
                     var cell = new Cell();
-                    int sect = getSector(r, c);
+                    int sect = GetSector(r, c);
 
-                    for (int v = 0; v < 9; v++)
+                    if (board[r, c] == null)
                     {
-                        int tempVal = genCell();
-                        if (isCellValid(board, r, c, sect, tempVal))
+                        for (int v = 1; v <= 9; v++)
                         {
-                            cell.Value = tempVal;
-                            cell.Row = r;
-                            cell.Column = c;
-                            cell.Sector = sect;
+                            //int tempVal = genCell();
+                            if (IsCellValid(board, r, c, v))
+                            {
+                                cell.Value = v;
+                                cell.Row = r;
+                                cell.Column = c;
+                                cell.Sector = sect;
 
-                            //update corresponding cell collections with valid cell details
-                            _rows[r][c] = cell;
-                            _columns[c][r] = cell;
-                            _sectors[sect][r] = cell;
+                                board[r, c] = cell;
+
+                                if (FillBoard(board))
+                                    return true;
+                                else 
+                                    board[r, c] = null;
+                            }
                         }
-                    }
-                
+                        return false;
+                    }            
                 }
             }
+            _board = board;
+            return true;
         }
 
-        private int getSector (int row, int col)
+        private int GetSector (int row, int col)
         {
             int sector = 0;
             
@@ -73,59 +73,64 @@ namespace Sudoku_Builder
             return sector;
         }
 
-        private int genCell()
-        {
-            Random random = new Random();
-            int number = random.Next(1, 10);
-            return number;
-        }
+        //private int genCell()
+        //{
+        //    Random random = new Random();
+        //    int number = random.Next(1, 10);
+        //    return number;
+        //}
 
-        private Boolean isCellValid(Cell[,] board, int row, int col, int sect, int value)
+        private Boolean IsCellValid(Cell[,] board, int row, int col, int value)
         {
             for (int i = 0; i < 9; i++)
             {
                 //check if a cell of this value already exists in the same row
-                if (board[i, col] != null && board[i, col].Value == value)  return false;
-                //foreach (Cell cell in _rows[row])
-                //{
-                //    if (cell.Value == value) return false;
-                //}
+                if (board[i, col] != null && board[i, col].Value == value)  
+                    return false;
 
                 //check if a cell of this value already exists in the same column
-                if (board[row, i] != null && board[i, row].Value == value)  return false;
-                //foreach (Cell cell in _columns[col])
-                //{
-                //    if (cell.Value == value) return false;
-                //}
+                if (board[row, i] != null && board[row, i].Value == value)  
+                    return false;                
+            }
 
-                //check if a cell of this value already exists in the same sector
-                if (board)
-                //foreach (Cell cell in _sectors[sect])
-                //{
-                //    if (cell.Value == value) return false;
-                //}
+            //check if a cell of this value already exists in the same sector
+            // sqRow and sqCol can only be 0, 3, or 6 
+            int sqRow = row / 3 * 3; 
+            int sqCol = col / 3 * 3;
+
+            for (int r = sqRow; r < sqRow + 3; r++)
+            {
+                for (int c = sqCol; c < sqCol + 3; c++)
+                {
+                    if (board[r, c] != null && board[r,c].Value == value)
+                        return false;
+                }
             }
 
             //none of the loops above found a duplicate number, so cell is valid
             return true;
         }
 
-
-        public IEnumerator<Row> GetEnumerator()
+        public IEnumerator GetEnumerator()
         {
-            return ((IEnumerable<Row>)_rows).GetEnumerator();
+            return _board.GetEnumerator();
         }
 
-        IEnumerator<Column> IEnumerable<Column>.GetEnumerator()
-        {
-            return ((IEnumerable<Column>)_columns).GetEnumerator();
-        }
+        //public IEnumerator<Row> GetEnumerator()
+        //{
+        //    return ((IEnumerable<Row>)_rows).GetEnumerator();
+        //}
 
-        IEnumerator<Sector> IEnumerable<Sector>.GetEnumerator()
-        {
-            return ((IEnumerable<Sector>)_sectors).GetEnumerator();
-        }
+        //IEnumerator<Column> IEnumerable<Column>.GetEnumerator()
+        //{
+        //    return ((IEnumerable<Column>)_columns).GetEnumerator();
+        //}
 
-        IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
+        //IEnumerator<Sector> IEnumerable<Sector>.GetEnumerator()
+        //{
+        //    return ((IEnumerable<Sector>)_sectors).GetEnumerator();
+        //}
+
+        //IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
     }
 }
